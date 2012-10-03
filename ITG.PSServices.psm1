@@ -1,6 +1,6 @@
-ImportSystemModules
+п»їImportSystemModules;
 
-[void][System.Reflection.Assembly]::LoadWithPartialName('system.serviceprocess')
+add-type -assembly 'System.ServiceProcess'; 
 
 set-variable `
     -name itgPSServiceHost `
@@ -22,37 +22,39 @@ set-variable `
     -option constant
 
 function New-PSService {
-	<#
-		.Synopsis
-		    Регистрация в реестре новой службы, представляющей из себя сценарий power shell.
-		.Description
-		    Регистрация в реестре новой службы, представляющей из себя сценарий power shell. В качестве хост процесса будет
-            использован srvany.exe из состава RK. 
-		.Parameter File
-		    Путь к файлу скрипта, который и станет службой
-		.Parameter Name
-			Идентификатор (короткий) службы
-		.Parameter DisplayName
-			Отображаемый идентификатор службы
-		.Parameter Description
-            Описание службы
+    <#
+        .Synopsis
+            Р РµРіРёСЃС‚СЂР°С†РёСЏ РІ СЂРµРµСЃС‚СЂРµ РЅРѕРІРѕР№ СЃР»СѓР¶Р±С‹, РїСЂРµРґСЃС‚Р°РІР»СЏСЋС‰РµР№ РёР· СЃРµР±СЏ СЃС†РµРЅР°СЂРёР№ power shell.
+        .Description
+            Р РµРіРёСЃС‚СЂР°С†РёСЏ РІ СЂРµРµСЃС‚СЂРµ РЅРѕРІРѕР№ СЃР»СѓР¶Р±С‹, РїСЂРµРґСЃС‚Р°РІР»СЏСЋС‰РµР№ РёР· СЃРµР±СЏ СЃС†РµРЅР°СЂРёР№ power shell. Р’ РєР°С‡РµСЃС‚РІРµ С…РѕСЃС‚ РїСЂРѕС†РµСЃСЃР° Р±СѓРґРµС‚
+            РёСЃРїРѕР»СЊР·РѕРІР°РЅ srvany.exe РёР· СЃРѕСЃС‚Р°РІР° RK. 
+        .Parameter File
+            РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ СЃРєСЂРёРїС‚Р°, РєРѕС‚РѕСЂС‹Р№ Рё СЃС‚Р°РЅРµС‚ СЃР»СѓР¶Р±РѕР№
+        .Parameter Name
+            РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ (РєРѕСЂРѕС‚РєРёР№) СЃР»СѓР¶Р±С‹
+        .Parameter DisplayName
+            РћС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃР»СѓР¶Р±С‹
+        .Parameter Description
+            РћРїРёСЃР°РЅРёРµ СЃР»СѓР¶Р±С‹
         .Parameter Group
-            Группа служб, к которой должна быть отнесена данная служба
+            Р“СЂСѓРїРїР° СЃР»СѓР¶Р±, Рє РєРѕС‚РѕСЂРѕР№ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РѕС‚РЅРµСЃРµРЅР° РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°
         .Parameter DependsOnServices
-            Массив идентификаторов служб, от которых зависит данная служба
+            РњР°СЃСЃРёРІ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ СЃР»СѓР¶Р±, РѕС‚ РєРѕС‚РѕСЂС‹С… Р·Р°РІРёСЃРёС‚ РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°
         .Parameter DependsOnGroups
-            Массив идентификаторов групп сервисов, от которых зависит данная служба
+            РњР°СЃСЃРёРІ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РіСЂСѓРїРї СЃРµСЂРІРёСЃРѕРІ, РѕС‚ РєРѕС‚РѕСЂС‹С… Р·Р°РІРёСЃРёС‚ РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°
         .Parameter StartupType
-            Вариант запуска службы
+            Р’Р°СЂРёР°РЅС‚ Р·Р°РїСѓСЃРєР° СЃР»СѓР¶Р±С‹
         .Parameter RestoreParams
-            Параметры восстановления службы в случае сбоя
-		.Example
-			Регистрация новой службы:
+            РџР°СЂР°РјРµС‚СЂС‹ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ СЃР»СѓР¶Р±С‹ РІ СЃР»СѓС‡Р°Рµ СЃР±РѕСЏ
+		.Link
+			# http://msdn.microsoft.com/en-us/library/bb490995.aspx
+        .Example
+            Р РµРіРёСЃС‚СЂР°С†РёСЏ РЅРѕРІРѕР№ СЃР»СѓР¶Р±С‹:
             
-			New-PSService `
+            New-PSService `
                 -File "c:\windows\service.ps1" `
                 -Name "NewService1" `
-                -DisplayName "Новый сервис" `
+                -DisplayName "РќРѕРІС‹Р№ СЃРµСЂРІРёСЃ" `
                 -DependsOnServices "SMTPSVC", "NetLogon" `
                 -StartupType "Automatic" `
                 -RestoreParams @{ `
@@ -64,74 +66,81 @@ function New-PSService {
                         @{action="restart";period=60}, `
                         @{action="restart";period=60} `
                 }
-	#>
+    #>
     param (
-		[Parameter(
-			Mandatory=$true,
-			Position=0,
-			ValueFromPipeline=$false,
-			HelpMessage="Путь к файлу скрипта, который и станет службой."
-		)]
-        [string]$File,
-		[Parameter(
-			Mandatory=$true,
-			Position=1,
-			ValueFromPipeline=$false,
-			HelpMessage="Идентификатор (короткий) службы."
-		)]
-        [string]$Name,
-		[Parameter(
-			Mandatory=$false,
-			Position=2,
-			ValueFromPipeline=$false,
-			HelpMessage="Отображаемый идентификатор службы."
-		)]
-  		[string]$DisplayName = $Name,
-		[Parameter(
-			Mandatory=$false,
-			Position=3,
-			ValueFromPipeline=$false,
-			HelpMessage="Описание службы."
-		)]
-  		[string]$Description = "Служба на базе сценария PowerShell $([System.IO.Path]::GetFileNameWithoutExtension($File))",
-		[Parameter(
-			Mandatory=$false,
-			Position=4,
-			ValueFromPipeline=$false,
-			HelpMessage="Группа служб, к которой должна быть отнесена данная служба."
-		)]
-  		[string]$Group,
-		[Parameter(
-			Mandatory=$false,
-			Position=5,
-			ValueFromPipeline=$false,
-			HelpMessage="Массив идентификаторов служб, от которых зависит данная служба."
-		)]
-  		[string[]]$DependsOnServices,
-		[Parameter(
-			Mandatory=$false,
-			Position=6,
-			ValueFromPipeline=$false,
-			HelpMessage="Массив идентификаторов групп служб, от которых зависит данная служба."
-		)]
-  		[string[]]$DependsOnGroups,
-		[Parameter(
-			Mandatory=$false,
-			Position=7,
-			ValueFromPipeline=$false,
-			HelpMessage="Вариант запуска службы."
-		)]
-  		[System.ServiceProcess.ServiceStartMode]$StartupType = [System.ServiceProcess.ServiceStartMode]::Manual,
-		[Parameter(
-			Mandatory=$false,
-			Position=8,
-			ValueFromPipeline=$false,
-			HelpMessage="Параметры восстановления службы в случае сбоя."
-		)]
-  		$RestoreParams
-	)
+        [Parameter(
+            Mandatory=$true,
+            Position=0,
+            ValueFromPipeline=$false,
+            HelpMessage="РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ СЃРєСЂРёРїС‚Р°, РєРѕС‚РѕСЂС‹Р№ Рё СЃС‚Р°РЅРµС‚ СЃР»СѓР¶Р±РѕР№."
+        )]
+        [string]$File
+	,
+        [Parameter(
+            Mandatory=$true,
+            Position=1,
+            ValueFromPipeline=$false,
+            HelpMessage="РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ (РєРѕСЂРѕС‚РєРёР№) СЃР»СѓР¶Р±С‹."
+        )]
+        [string]$Name
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=2,
+            ValueFromPipeline=$false,
+            HelpMessage="РћС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃР»СѓР¶Р±С‹."
+        )]
+        [string]$DisplayName = $Name
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=3,
+            ValueFromPipeline=$false,
+            HelpMessage="РћРїРёСЃР°РЅРёРµ СЃР»СѓР¶Р±С‹."
+        )]
+        [string]$Description = "РЎР»СѓР¶Р±Р° РЅР° Р±Р°Р·Рµ СЃС†РµРЅР°СЂРёСЏ PowerShell $([System.IO.Path]::GetFileNameWithoutExtension($File))"
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=4,
+            ValueFromPipeline=$false,
+            HelpMessage="Р“СЂСѓРїРїР° СЃР»СѓР¶Р±, Рє РєРѕС‚РѕСЂРѕР№ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РѕС‚РЅРµСЃРµРЅР° РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°."
+        )]
+        [string]$Group
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=5,
+            ValueFromPipeline=$false,
+            HelpMessage="РњР°СЃСЃРёРІ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ СЃР»СѓР¶Р±, РѕС‚ РєРѕС‚РѕСЂС‹С… Р·Р°РІРёСЃРёС‚ РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°."
+        )]
+        [string[]]$DependsOnServices
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=6,
+            ValueFromPipeline=$false,
+            HelpMessage="РњР°СЃСЃРёРІ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РіСЂСѓРїРї СЃР»СѓР¶Р±, РѕС‚ РєРѕС‚РѕСЂС‹С… Р·Р°РІРёСЃРёС‚ РґР°РЅРЅР°СЏ СЃР»СѓР¶Р±Р°."
+        )]
+        [string[]]$DependsOnGroups
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=7,
+            ValueFromPipeline=$false,
+            HelpMessage="Р’Р°СЂРёР°РЅС‚ Р·Р°РїСѓСЃРєР° СЃР»СѓР¶Р±С‹."
+        )]
+        [System.ServiceProcess.ServiceStartMode]$StartupType = [System.ServiceProcess.ServiceStartMode]::Manual
+	,
+        [Parameter(
+            Mandatory=$false,
+            Position=8,
+            ValueFromPipeline=$false,
+            HelpMessage="РџР°СЂР°РјРµС‚СЂС‹ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ СЃР»СѓР¶Р±С‹ РІ СЃР»СѓС‡Р°Рµ СЃР±РѕСЏ."
+        )]
+        $RestoreParams
+    )
 
-        # http://msdn.microsoft.com/en-us/library/bb490995.aspx
         [string[]]$depends = $null
         if ($DependsOnServices) {
             $depends += $DependsOnServices
